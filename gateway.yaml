@@ -1,0 +1,16 @@
+spring.cloud.gateway:
+  routes:
+  - id: product-service-route
+    uri: http://product-service.dev
+    predicates:
+    - Path=/services/product-service/**
+    filters:
+    - StripPrefix=2
+    - TokenRelay=
+  - id: order-service-route
+    uri: http://order-service.dev
+    predicates:
+    - Path=/services/order-service/**
+    filters:
+    - StripPrefix=2
+    - TokenRelay=
