@@ -14,3 +14,9 @@ spring.cloud.gateway:
     filters:
     - StripPrefix=2
     - TokenRelay=
+  - id: frontend-route
+    uri: http://frontend.dev
+    predicates:
+    - Path=/frontend/**
+    filters:
+    - StripPrefix=1
