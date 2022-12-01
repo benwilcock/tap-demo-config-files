@@ -1,2 +1,1 @@
-debug: true
 order.products-api-url: http://product-service.dev/api/v1/products
