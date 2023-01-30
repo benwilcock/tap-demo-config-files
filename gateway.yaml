@@ -1,6 +1,7 @@
 spring.cloud.gateway:
   default-filters:
     - DedupeResponseHeader=Access-Control-Allow-Origin
+    - AddResponseHeader=Access-Control-Allow-Origin, *
   routes:
   - id: product-service-route
     uri: http://product-service.dev
