@@ -1,0 +1,77 @@
+apiVersion: sso.apps.tanzu.vmware.com/v1alpha1
+kind: AuthServer
+metadata:
+  name: authserver-1
+  namespace: dev
+  labels:
+    name: authserver-1
+  annotations:
+    sso.apps.tanzu.vmware.com/allow-client-namespaces: dev
+    sso.apps.tanzu.vmware.com/allow-unsafe-issuer-uri: ""
+    sso.apps.tanzu.vmware.com/allow-unsafe-identity-provider: ""
+spec:
+  replicas: 1
+  issuerURI: http://authserver-1-dev.tap-next.blah.cloud
+  tokenSignature:
+    signAndVerifyKeyRef:
+      name: authserver-1-signing-key
+  identityProviders:
+  - name: internal
+    internalUnsafe:
+      users:
+      - username: admin
+        password: admin
+        roles:
+        - customer
+        - admin
+      - username: user
+        password: user
+        roles:
+        - customer
+---
+apiVersion: secretgen.k14s.io/v1alpha1
+kind: RSAKey
+metadata:
+  name: authserver-1-signing-key
+  namespace: dev
+spec:
+  secretTemplate:
+    type: Opaque
+    stringData:
+      key.pem: $(privateKey)
+      pub.pem: $(publicKey)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authserver-1
+  namespace: dev
+spec:
+  selector:
+    app.kubernetes.io/part-of: authserver-1
+    app.kubernetes.io/component: authorization-server
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: authserver-1
+  namespace: dev
+spec:
+  virtualhost:
+    fqdn: authserver-1-dev.tap-next.blah.cloud
+    corsPolicy:
+      allowOrigin:
+      - '*'
+      allowMethods:
+      - '*'
+      allowHeaders:
+      - '*'
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: authserver-1
+      port: 80

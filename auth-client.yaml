@@ -1,0 +1,32 @@
+apiVersion: sso.apps.tanzu.vmware.com/v1alpha1
+kind: ClientRegistration
+metadata:
+  name: client-registration
+spec:
+  authServerSelector:
+    matchLabels:
+      name: authserver-1
+  redirectURIs:
+  - http://gateway-dev.tap-next.blah.cloud/frontend/index.html
+  requireUserConsent: false
+  clientAuthenticationMethod: none
+  authorizationGrantTypes:
+  - client_credentials
+  - authorization_code
+  - refresh_token
+  scopes:
+  - name: openid
+  - name: offline_access
+  - name: email
+  - name: profile
+  - name: roles
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: auth-client
+spec:
+  ref:
+    apiVersion: sso.apps.tanzu.vmware.com/v1alpha1
+    kind: ClientRegistration
+    name: client-registration
