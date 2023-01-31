@@ -10,8 +10,11 @@ metadata:
     sso.apps.tanzu.vmware.com/allow-unsafe-issuer-uri: ""
     sso.apps.tanzu.vmware.com/allow-unsafe-identity-provider: ""
 spec:
+  tls:
+    issuerRef:
+      name: letsencrypt-live
+      kind: ClusterIssuer
   replicas: 1
-  issuerURI: http://authserver-1-dev.tap-next.blah.cloud
   tokenSignature:
     signAndVerifyKeyRef:
       name: authserver-1-signing-key
@@ -60,8 +63,13 @@ metadata:
   name: authserver-1
   namespace: dev
 spec:
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: authserver-1
+      port: 80
   virtualhost:
-    fqdn: authserver-1-dev.tap-next.blah.cloud
     corsPolicy:
       allowOrigin:
       - '*'
@@ -69,9 +77,6 @@ spec:
       - '*'
       allowHeaders:
       - '*'
-  routes:
-  - conditions:
-    - prefix: /
-    services:
-    - name: authserver-1
-      port: 80
+    fqdn: authserver-1-dev.tap-next.blah.cloud
+    tls:
+      secretName: authserver-1-auth-server

@@ -7,7 +7,7 @@ spec:
     matchLabels:
       name: authserver-1
   redirectURIs:
-  - http://gateway-dev.tap-next.blah.cloud/frontend/index.html
+  - https://gateway-dev.tap-next.blah.cloud/frontend/index.html
   requireUserConsent: false
   clientAuthenticationMethod: none
   authorizationGrantTypes:
