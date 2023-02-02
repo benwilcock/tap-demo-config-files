@@ -19,18 +19,18 @@ spec:
     signAndVerifyKeyRef:
       name: authserver-1-signing-key
   identityProviders:
-  - name: internal
-    internalUnsafe:
-      users:
-      - username: admin
-        password: admin
-        roles:
-        - customer
-        - admin
-      - username: user
-        password: user
-        roles:
-        - customer
+    - name: internal
+      internalUnsafe:
+        users:
+          - username: admin
+            password: admin
+            roles:
+              - customer
+              - admin
+          - username: user
+            password: user
+            roles:
+              - customer
 ---
 apiVersion: secretgen.k14s.io/v1alpha1
 kind: RSAKey
@@ -54,8 +54,8 @@ spec:
     app.kubernetes.io/part-of: authserver-1
     app.kubernetes.io/component: authorization-server
   ports:
-  - port: 80
-    targetPort: 8080
+    - port: 80
+      targetPort: 8080
 ---
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
@@ -64,19 +64,19 @@ metadata:
   namespace: dev
 spec:
   routes:
-  - conditions:
-    - prefix: /
-    services:
-    - name: authserver-1
-      port: 80
+    - conditions:
+        - prefix: /
+      services:
+        - name: authserver-1
+          port: 80
   virtualhost:
     corsPolicy:
       allowOrigin:
-      - '*'
+        - "*"
       allowMethods:
-      - '*'
+        - "*"
       allowHeaders:
-      - '*'
+        - "*"
     fqdn: authserver-1-dev.tap-next.blah.cloud
     tls:
       secretName: authserver-1-auth-server

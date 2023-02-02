@@ -7,19 +7,19 @@ spec:
     matchLabels:
       name: authserver-1
   redirectURIs:
-  - https://gateway-dev.tap-next.blah.cloud/frontend/index.html
+    - https://gateway-dev.tap-next.blah.cloud/frontend/index.html
   requireUserConsent: false
   clientAuthenticationMethod: none
   authorizationGrantTypes:
-  - client_credentials
-  - authorization_code
-  - refresh_token
+    - client_credentials
+    - authorization_code
+    - refresh_token
   scopes:
-  - name: openid
-  - name: offline_access
-  - name: email
-  - name: profile
-  - name: roles
+    - name: openid
+    - name: offline_access
+    - name: email
+    - name: profile
+    - name: roles
 ---
 apiVersion: services.apps.tanzu.vmware.com/v1alpha1
 kind: ResourceClaim
